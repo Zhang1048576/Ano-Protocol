@@ -3,6 +3,11 @@
 
 #include "ano-base.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 typedef struct 
 {
   void (* Ano_UpgradeStart)(void); //开始升级
@@ -28,5 +33,9 @@ void Ano_UpgradeInit(T_AnoUpgrade *Ano_Upgrade);
  * @param frameDataLen 升级数据帧的长度 
  */ 
 void Ano_ProcessUpgrade(uint8_t *upgradeFrameData, uint16_t frameDataLen);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif //_Ano_Upgrade_H_

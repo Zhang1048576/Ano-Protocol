@@ -3,6 +3,11 @@
 
 #include "Ano-Protocol/ano-base.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /** 
  * @brief 写入命令信息数据 
  * 
@@ -34,5 +39,9 @@ void Ano_SetCmdInfo(T_CMDInfo *cmdInfo, uint16_t cmdCount, void (*writeCmdInfo)(
 void Ano_ParseFunctionCMD(uint8_t *toParseData);
 
 static void (* Ano_WriteCmdInfo_Cb)(const uint8_t *frameData, uint16_t frameDataLen);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif //_ANO_COMMAND_H_

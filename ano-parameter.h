@@ -3,6 +3,11 @@
 
 #include "ano-base.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /** 
  * @brief 写入参数值数据 
  * 
@@ -56,5 +61,9 @@ void Ano_SendParameCount(void);
  * @param parameterNum 参数编号 
  */ 
 void Ano_SendParameterInfo(uint16_t parameterNum);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif //_ANO_PARAMETER_H_

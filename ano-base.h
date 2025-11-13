@@ -1,6 +1,12 @@
 #ifndef _ANO_BASE_H_
 #define _ANO_BASE_H_
 
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -265,5 +271,9 @@ void Ano_SetDevInfo(T_DevInfo *devInfo);
  * 将之前设置的设备信息发送出去。 
  */ 
 void Ano_SendDevInfo(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif //_ANO_BASE_H_
