@@ -8,6 +8,7 @@ void Ano_SetParameterInfo(T_ParameterInfo *parameterInfo, uint16_t parameterCoun
   g_parameterCount = parameterCount;
   g_parameterInfo = parameterInfo;
 
+  #if 0
   for(int i=0;i<g_parameterCount;i++){
     switch (g_parameterInfo[i].PAR_TYPE) {
       case PAR_VAL_TYPE_UINT8:
@@ -47,6 +48,7 @@ void Ano_SetParameterInfo(T_ParameterInfo *parameterInfo, uint16_t parameterCoun
         break;
     }
   }
+  #endif
 }
 
 void Ano_SendParameterInfo(uint16_t parameterNum)
@@ -198,6 +200,8 @@ void Ano_WriteParameValue(uint8_t *parameterData, uint16_t parameterDataLen)
 {
   printf("parameterDataLen : %d\n", parameterDataLen);
   uint16_t parNum = ((uint16_t)parameterData[1] << 8)|parameterData[0];
+  if(g_parameterInfo[parNum].PAR_VAL == NULL)
+    return ;    ///< TODO: error message, 空指针
   switch (g_parameterInfo[parNum].PAR_TYPE) {
     case PAR_VAL_TYPE_UINT8:
     case PAR_VAL_TYPE_INT8:

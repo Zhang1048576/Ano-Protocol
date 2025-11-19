@@ -8,7 +8,7 @@
 
 const uint8_t FRAME_HEAD = 0xAB;
 const uint8_t FRAME_D_ADDR = 0xFE;
-const uint8_t FRAME_S_ADDR = 0x08;
+uint8_t FRAME_S_ADDR = 0x08;
 
 static T_DevInfo *g_devInfo;
 
@@ -114,6 +114,7 @@ void Ano_SetDevInfo(T_DevInfo *devInfo)
 {
   if(devInfo != NULL){
     g_devInfo = devInfo;
+    FRAME_S_ADDR = devInfo->DEV_ID;
   }
   else Ano_SendLog(1,(const uint8_t *)"devinfo setting error!");
 }
