@@ -3,6 +3,11 @@
 
 #include "ano-base.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /** 
  * @brief 发送惯性传感器数据 
  * 
@@ -65,5 +70,9 @@ void Ano_Send_Altitude(int32_t alt_bar, int32_t alt_add, int32_t alt_fu);
 
 
 void Ano_Send_Dist(uint16_t dist_ra, uint16_t dist_rd);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif //_ANO_CONTROL_INFO_H_

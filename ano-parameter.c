@@ -73,7 +73,7 @@ void Ano_SendParameCount(void)
   sendInfo[0] = 0x01;
   sendInfo[1] = Little(g_parameterCount);
   sendInfo[2] = Big(g_parameterCount);
-  printf("num %d\n", g_parameterCount);
+  // printf("num %d\n", g_parameterCount);
   Ano_SendData(ID_PARAMETER_COMMAND,(const uint8_t *)sendInfo, sizeof(sendInfo));
 }
 
@@ -87,80 +87,81 @@ void Ano_SendParameValue(uint16_t parameterNum)
   sendInfo[0] = Little(g_parameterInfo[parameterNum].PAR_ID);
   sendInfo[1] = Big(g_parameterInfo[parameterNum].PAR_ID);
   int len = 2;
-  switch (g_parameterInfo[parameterNum].PAR_TYPE) {
-    case PAR_VAL_TYPE_UINT8:
-    case PAR_VAL_TYPE_INT8:
-      sendInfo[2] = *(uint8_t *)g_parameterInfo[parameterNum].PAR_VAL;
-      len += 1;
-      break;
+  if(g_parameterInfo[parameterNum].PAR_VAL != NULL)
+    switch (g_parameterInfo[parameterNum].PAR_TYPE) {
+      case PAR_VAL_TYPE_UINT8:
+      case PAR_VAL_TYPE_INT8:
+        sendInfo[2] = *(uint8_t *)g_parameterInfo[parameterNum].PAR_VAL;
+        len += 1;
+        break;
 
-    case PAR_VAL_TYPE_UINT16:
-    case PAR_VAL_TYPE_INT16:
-      sendInfo[2] = *(uint16_t *)g_parameterInfo[parameterNum].PAR_VAL & 0xFF;
-      sendInfo[3] = (*(uint16_t *)g_parameterInfo[parameterNum].PAR_VAL >> 8) & 0xFF;
-      len += 2;
-      break;
+      case PAR_VAL_TYPE_UINT16:
+      case PAR_VAL_TYPE_INT16:
+        sendInfo[2] = *(uint16_t *)g_parameterInfo[parameterNum].PAR_VAL & 0xFF;
+        sendInfo[3] = (*(uint16_t *)g_parameterInfo[parameterNum].PAR_VAL >> 8) & 0xFF;
+        len += 2;
+        break;
 
-    case PAR_VAL_TYPE_UINT32:
-    case PAR_VAL_TYPE_INT32:
-      sendInfo[2] = *(uint32_t *)g_parameterInfo[parameterNum].PAR_VAL & 0xFF;
-      sendInfo[3] = (*(uint32_t *)g_parameterInfo[parameterNum].PAR_VAL >> 8) & 0xFF;
-      sendInfo[4] = (*(uint32_t *)g_parameterInfo[parameterNum].PAR_VAL >> 16) & 0xFF;
-      sendInfo[5] = (*(uint32_t *)g_parameterInfo[parameterNum].PAR_VAL >> 24) & 0xFF;
-      len += 4;
-      break;
-
-    case PAR_VAL_TYPE_UINT64:
-    case PAR_VAL_TYPE_INT64:
-      sendInfo[2] = *(uint64_t *)g_parameterInfo[parameterNum].PAR_VAL & 0xFF;
-      sendInfo[3] = (*(uint64_t *)g_parameterInfo[parameterNum].PAR_VAL >> 8) & 0xFF;
-      sendInfo[4] = (*(uint64_t *)g_parameterInfo[parameterNum].PAR_VAL >> 16) & 0xFF;
-      sendInfo[5] = (*(uint64_t *)g_parameterInfo[parameterNum].PAR_VAL >> 24) & 0xFF;
-      sendInfo[6] = (*(uint64_t *)g_parameterInfo[parameterNum].PAR_VAL >> 32) & 0xFF;
-      sendInfo[7] = (*(uint64_t *)g_parameterInfo[parameterNum].PAR_VAL >> 40) & 0xFF;
-      sendInfo[8] = (*(uint64_t *)g_parameterInfo[parameterNum].PAR_VAL >> 48) & 0xFF;
-      sendInfo[9] = (*(uint64_t *)g_parameterInfo[parameterNum].PAR_VAL >> 56) & 0xFF;
-      len += 8;
-      break;
-
-    case PAR_VAL_TYPE_FLOAT:
-      {
-        // Assuming sizeof(float) is 4
-        uint32_t temp = *(uint32_t *)g_parameterInfo[parameterNum].PAR_VAL;
-        sendInfo[2] = temp & 0xFF;
-        sendInfo[3] = (temp >> 8) & 0xFF;
-        sendInfo[4] = (temp >> 16) & 0xFF;
-        sendInfo[5] = (temp >> 24) & 0xFF;
+      case PAR_VAL_TYPE_UINT32:
+      case PAR_VAL_TYPE_INT32:
+        sendInfo[2] = *(uint32_t *)g_parameterInfo[parameterNum].PAR_VAL & 0xFF;
+        sendInfo[3] = (*(uint32_t *)g_parameterInfo[parameterNum].PAR_VAL >> 8) & 0xFF;
+        sendInfo[4] = (*(uint32_t *)g_parameterInfo[parameterNum].PAR_VAL >> 16) & 0xFF;
+        sendInfo[5] = (*(uint32_t *)g_parameterInfo[parameterNum].PAR_VAL >> 24) & 0xFF;
         len += 4;
-      }
-      break;
+        break;
 
-    case PAR_VAL_TYPE_DOUBLE:
-      {
-        // Assuming sizeof(double) is 8
-        uint64_t temp = *(uint64_t *)g_parameterInfo[parameterNum].PAR_VAL;
-        sendInfo[2] = temp & 0xFF;
-        sendInfo[3] = (temp >> 8) & 0xFF;
-        sendInfo[4] = (temp >> 16) & 0xFF;
-        sendInfo[5] = (temp >> 24) & 0xFF;
-        sendInfo[6] = (temp >> 32) & 0xFF;
-        sendInfo[7] = (temp >> 40) & 0xFF;
-        sendInfo[8] = (temp >> 48) & 0xFF;
-        sendInfo[9] = (temp >> 56) & 0xFF;
+      case PAR_VAL_TYPE_UINT64:
+      case PAR_VAL_TYPE_INT64:
+        sendInfo[2] = *(uint64_t *)g_parameterInfo[parameterNum].PAR_VAL & 0xFF;
+        sendInfo[3] = (*(uint64_t *)g_parameterInfo[parameterNum].PAR_VAL >> 8) & 0xFF;
+        sendInfo[4] = (*(uint64_t *)g_parameterInfo[parameterNum].PAR_VAL >> 16) & 0xFF;
+        sendInfo[5] = (*(uint64_t *)g_parameterInfo[parameterNum].PAR_VAL >> 24) & 0xFF;
+        sendInfo[6] = (*(uint64_t *)g_parameterInfo[parameterNum].PAR_VAL >> 32) & 0xFF;
+        sendInfo[7] = (*(uint64_t *)g_parameterInfo[parameterNum].PAR_VAL >> 40) & 0xFF;
+        sendInfo[8] = (*(uint64_t *)g_parameterInfo[parameterNum].PAR_VAL >> 48) & 0xFF;
+        sendInfo[9] = (*(uint64_t *)g_parameterInfo[parameterNum].PAR_VAL >> 56) & 0xFF;
         len += 8;
-      }
-      break;
+        break;
 
-    case PAR_VAL_TYPE_STRING:
-      // Assuming val points to a null-terminated string
-      strcpy((char *)sendInfo, (const char *)g_parameterInfo[parameterNum].PAR_VAL);
-      len += strlen(g_parameterInfo[parameterNum].PAR_VAL);
-      break;
+      case PAR_VAL_TYPE_FLOAT:
+        {
+          // Assuming sizeof(float) is 4
+          uint32_t temp = *(uint32_t *)g_parameterInfo[parameterNum].PAR_VAL;
+          sendInfo[2] = temp & 0xFF;
+          sendInfo[3] = (temp >> 8) & 0xFF;
+          sendInfo[4] = (temp >> 16) & 0xFF;
+          sendInfo[5] = (temp >> 24) & 0xFF;
+          len += 4;
+        }
+        break;
 
-    default:
-      // Handle unknown type
-      break;
-  }
+      case PAR_VAL_TYPE_DOUBLE:
+        {
+          // Assuming sizeof(double) is 8
+          uint64_t temp = *(uint64_t *)g_parameterInfo[parameterNum].PAR_VAL;
+          sendInfo[2] = temp & 0xFF;
+          sendInfo[3] = (temp >> 8) & 0xFF;
+          sendInfo[4] = (temp >> 16) & 0xFF;
+          sendInfo[5] = (temp >> 24) & 0xFF;
+          sendInfo[6] = (temp >> 32) & 0xFF;
+          sendInfo[7] = (temp >> 40) & 0xFF;
+          sendInfo[8] = (temp >> 48) & 0xFF;
+          sendInfo[9] = (temp >> 56) & 0xFF;
+          len += 8;
+        }
+        break;
+
+      case PAR_VAL_TYPE_STRING:
+        // Assuming val points to a null-terminated string
+        strcpy((char *)sendInfo, (const char *)g_parameterInfo[parameterNum].PAR_VAL);
+        len += strlen(g_parameterInfo[parameterNum].PAR_VAL);
+        break;
+
+      default:
+        // Handle unknown type
+        break;
+    }
   Ano_SendData(ID_PARAMETER_VALUE_RW, (const uint8_t *)sendInfo, len);
 }
 
@@ -183,7 +184,7 @@ void Ano_ParseParCMD(uint8_t *toParseData)
       Ano_LogDebug((const char *)"par value %d", parCmd);
       break;
     case PAR_CMD_PAR_INFO:
-      printf("val-id : %d", parVal);
+      // printf("val-id : %d", parVal);
       Ano_SendParameterInfo(parVal); // 发送对应参数ID参数信息
       Ano_LogDebug((const char *)"par info");
       break;
@@ -198,7 +199,7 @@ void Ano_ParseParCMD(uint8_t *toParseData)
 
 void Ano_WriteParameValue(uint8_t *parameterData, uint16_t parameterDataLen)
 {
-  printf("parameterDataLen : %d\n", parameterDataLen);
+  // printf("parameterDataLen : %d\n", parameterDataLen);
   uint16_t parNum = ((uint16_t)parameterData[1] << 8)|parameterData[0];
   if(g_parameterInfo[parNum].PAR_VAL == NULL)
     return ;    ///< TODO: error message, 空指针
